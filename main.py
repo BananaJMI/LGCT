@@ -36,13 +36,20 @@ def setup_model():
         args.n_bands = dataset_bands[args.dataset]
 
     # Build the model
-    if args.arch == 'LGCT':
-        model = LGCT(img_size=args.image_size, upscale=args.scale_ratio,
-                     in_chans1=args.n_select_bands + args.n_bands, in_chans2=args.n_bands,
-                     embed_dim=48, dim_head=192, num_heads1=[8, 8, 8],
-                     window_size=8, group=8, dim=48, num_heads2=[8, 8, 8], ffn_expansion_factor=2.66,
-                     LayerNorm_type='WithBias', bias=False).cuda()
-
+    if args.arch == 'LGCT' :
+        if args.scale_ratio == 4:
+            model = LGCT(img_size=args.image_size, upscale=args.scale_ratio,
+                        in_chans1=args.n_select_bands + args.n_bands, in_chans2=args.n_bands,
+                        embed_dim=48, dim_head=192, num_heads1=[8, 8, 8],
+                        window_size=args.win_size, group=args.group, dim=48, num_heads2=[8, 8, 8],  ffn_expansion_factor=2.66,
+                        LayerNorm_type = 'WithBias', bias=False).cuda()
+        elif args.scale_ratio == 8:
+            model = LGCT_8(img_size=args.image_size, upscale=args.scale_ratio,
+                        in_chans1=args.n_select_bands + args.n_bands, in_chans2=args.n_bands,
+                        embed_dim=48//2, dim_head=192, num_heads1=[8, 8, 8, 8],
+                        window_size=args.win_size, group=args.group, dim=48, num_heads2=[8, 8, 8, 8],  ffn_expansion_factor=2.66,
+                        LayerNorm_type = 'WithBias', bias=False).cuda()
+            
     # Setup optimizer
     optimizer = optim.Adam(model.parameters(), lr=args.lr)
     print(f"Model size: {sum(p.numel() for p in model.parameters()) / 1e6:.3f}M")
