@@ -25,7 +25,8 @@ def args_parser():
                         help='Loss = L1 or l1ssim')
     # hyperparams(window size and group)
     parser.add_argument('--win_size', type=int, default=8, help='4,8,16,32')
-    parser.add_argument('--group', type=int, default=32, help='4,8,16,32')
+    parser.add_argument('--group', type=int, default=8, help='4,8,16,32')
 
     args = parser.parse_args()
     return args
+
