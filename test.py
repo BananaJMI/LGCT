@@ -4,7 +4,8 @@ os.environ["CUDA_VISIBLE_DEVICES"] = "1"
 
 import torch
 import torch.optim
-from models.LGCT_arch import LGCT
+from models.LGCT_arch_×4_ar_v1 import LGCT
+from models.LGCT_arch_×8_ar_v1 import LGCT_8
 
 from utils import *
 from metrics import calc_psnr, calc_rmse, calc_ergas, calc_sam, calc_cc, calc_ssim
@@ -51,7 +52,19 @@ def main():
                      embed_dim=48, dim_head=192, num_heads1=[8, 8, 8],
                      window_size=8, group=8, dim=48, num_heads2=[8, 8, 8], ffn_expansion_factor=2.66,
                      LayerNorm_type='WithBias', bias=False)
-
+    if args.arch == 'LGCT' :
+        if args.scale_ratio == 4:
+            model = LGCT(img_size=args.image_size, upscale=args.scale_ratio,
+                        in_chans1=args.n_select_bands + args.n_bands, in_chans2=args.n_bands,
+                        embed_dim=48, dim_head=192, num_heads1=[8, 8, 8], window_size=args.win_size, 
+                        group=args.group, dim=48, num_heads2=[8, 8, 8],  ffn_expansion_factor=2.66,
+                        LayerNorm_type = 'WithBias', bias=False)
+        elif args.scale_ratio == 8:
+            model = LGCT_8(img_size=args.image_size, upscale=args.scale_ratio,
+                        in_chans1=args.n_select_bands + args.n_bands, in_chans2=args.n_bands,
+                        embed_dim=48//2, dim_head=192, num_heads1=[8, 8, 8, 8], window_size=args.win_size, 
+                        group=args.group, dim=48, num_heads2=[8, 8, 8, 8],  ffn_expansion_factor=2.66,
+                        LayerNorm_type = 'WithBias', bias=False)   
     # Load the trained model parameters
     model_path = os.path.join(args.model_path, args.arch, args.dataset)
     train_best_epoch = '2024_11_27_00_21_14/net_9946epoch.pth' # root path of pre-trained model weight
