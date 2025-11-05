@@ -37,7 +37,7 @@ Before training, you need to:
 ### 1. Training 
 Use the following command to train the network. Take training LGCT ×4 in the Houston dataset as an example,
 ```
- CUDA_VISIBLE_DEVICES=0 python -u python.py  \
+ CUDA_VISIBLE_DEVICES=0 python -u main.py  \
     -arch 'LGCT' \
     -root '[root path of datasets]' \
     -dataset 'Houston' \
