@@ -3,7 +3,8 @@ os.environ["CUDA_VISIBLE_DEVICES"] = '0'
 import time
 import torch
 from torch import nn, optim
-from models.LGCT_arch import LGCT
+from models.LGCT_arch_×4_ar_v1 import LGCT
+from models.LGCT_arch_×8_ar_v1 import LGCT_8
 
 from utils import *
 from data_loader import build_datasets
